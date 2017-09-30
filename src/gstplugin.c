@@ -156,9 +156,9 @@ gst_plugin_template_class_init (GstPluginTemplateClass * klass)
     "AUTHOR_NAME AUTHOR_EMAIL");
 
   gst_element_class_add_pad_template (gstelement_class,
-      gst_static_pad_template_get (&src_factory));
+      gst_static_pad_template_get (&avt_decrypt_ts_sink_template));
   gst_element_class_add_pad_template (gstelement_class,
-      gst_static_pad_template_get (&sink_factory));
+      gst_static_pad_template_get (&avt_decrypt_ts_src_template));
   gstbasetrans_class->transform =
       GST_DEBUG_FUNCPTR (gst_avt_decrypt_ts_transform);
   gstbasetrans_class->start = GST_DEBUG_FUNCPTR (gst_avt_decrypt_ts_start);
