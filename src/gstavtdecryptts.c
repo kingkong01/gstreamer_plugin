@@ -109,9 +109,9 @@ static GstFlowReturn gst_avt_decrypt_ts_transform (GstBaseTransform * trans,
 static gboolean
 gst_avt_decrypt_ts_start (GstBaseTransform * trans)
 {
-  GstAvtDecryptTs *filter;
+  //GstAvtDecryptTs *filter;
 
-  filter = GST_AVT_DECRYPT_TS (trans);
+  //filter = GST_AVT_DECRYPT_TS (trans);
 
   return TRUE;
 }
