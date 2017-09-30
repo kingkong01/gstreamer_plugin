@@ -97,6 +97,22 @@ static GstStaticPadTemplate src_factory = GST_STATIC_PAD_TEMPLATE ("src",
     GST_STATIC_CAPS ("ANY")
     );
 
+GstStaticPadTemplate avt_decrypt_ts_src_template = GST_STATIC_PAD_TEMPLATE ("src",
+    GST_PAD_SRC,
+    GST_PAD_ALWAYS,
+    GST_STATIC_CAPS ("video/mpegts, " "systemstream = (boolean) true "));
+
+GstStaticPadTemplate avt_decrypt_ts_sink_template = GST_STATIC_PAD_TEMPLATE ("sink",
+    GST_PAD_SINK,
+    GST_PAD_ALWAYS,
+    GST_STATIC_CAPS ("video/mpegts, " "systemstream = (boolean) true "));
+
+static GstFlowReturn gst_avt_decrypt_ts_transform (GstBaseTransform * trans,
+    GstBuffer * inbuf,GstBuffer * outbuf);
+
+static gboolean gst_avt_decrypt_ts_start (GstBaseTransform * trans);
+static gboolean gst_avt_decrypt_ts_stop (GstBaseTransform * trans);
+
 #define gst_plugin_template_parent_class parent_class
 G_DEFINE_TYPE (GstPluginTemplate, gst_plugin_template, GST_TYPE_ELEMENT);
 
@@ -116,11 +132,13 @@ static GstFlowReturn gst_plugin_template_transform_ip (GstBaseTransform * base,
 static void
 gst_plugin_template_class_init (GstPluginTemplateClass * klass)
 {
+  GstBaseTransformClass *gstbasetrans_class;
   GObjectClass *gobject_class;
   GstElementClass *gstelement_class;
 
   gobject_class = (GObjectClass *) klass;
   gstelement_class = (GstElementClass *) klass;
+  gstbasetrans_class = GST_BASE_TRANSFORM_CLASS (klass);
 
   gobject_class->set_property = gst_plugin_template_set_property;
   gobject_class->get_property = gst_plugin_template_get_property;
@@ -141,8 +159,38 @@ gst_plugin_template_class_init (GstPluginTemplateClass * klass)
       gst_static_pad_template_get (&src_factory));
   gst_element_class_add_pad_template (gstelement_class,
       gst_static_pad_template_get (&sink_factory));
+  gstbasetrans_class->transform =
+      GST_DEBUG_FUNCPTR (gst_avt_decrypt_ts_transform);
+  gstbasetrans_class->start = GST_DEBUG_FUNCPTR (gst_avt_decrypt_ts_start);
+  gstbasetrans_class->stop = GST_DEBUG_FUNCPTR (gst_avt_decrypt_ts_stop);
 }
 
+static GstFlowReturn gst_avt_decrypt_ts_transform (GstBaseTransform * trans,
+    GstBuffer * inbuf,GstBuffer * outbuf)
+{
+#if 0
+
+#endif
+
+  return GST_FLOW_OK;
+}
+
+static gboolean
+gst_avt_decrypt_ts_start (GstBaseTransform * trans)
+{
+  //GstPluginTemplate *filter = GST_PLUGIN_TEMPLATE (trans);
+
+
+  return TRUE;
+}
+
+static gboolean
+gst_avt_decrypt_ts_stop (GstBaseTransform * trans)
+{
+  //GstPluginTemplate *filter = GST_PLUGIN_TEMPLATE (trans);
+  /* anything we should be doing here? */
+  return TRUE;
+}
 /* initialize the new element
  * instantiate pads and add them to element
  * set pad calback functions
