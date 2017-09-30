@@ -67,16 +67,17 @@ typedef struct _GstPluginTemplateClass GstPluginTemplateClass;
 
 struct _GstPluginTemplate
 {
-  GstElement element;
+  GstBaseTransform basetransform;
+  //GstElement element;
 
-  GstPad *sinkpad, *srcpad;
 
   gboolean silent;
 };
 
 struct _GstPluginTemplateClass 
 {
-  GstElementClass parent_class;
+  GstBaseTransformClass parent_class;
+  //GstElementClass parent_class;
 };
 
 GType gst_plugin_template_get_type (void);

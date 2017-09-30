@@ -85,17 +85,6 @@ enum
  *
  * describe the real formats here.
  */
-static GstStaticPadTemplate sink_factory = GST_STATIC_PAD_TEMPLATE ("sink",
-    GST_PAD_SINK,
-    GST_PAD_ALWAYS,
-    GST_STATIC_CAPS ("ANY")
-    );
-
-static GstStaticPadTemplate src_factory = GST_STATIC_PAD_TEMPLATE ("src",
-    GST_PAD_SRC,
-    GST_PAD_ALWAYS,
-    GST_STATIC_CAPS ("ANY")
-    );
 
 GstStaticPadTemplate avt_decrypt_ts_src_template = GST_STATIC_PAD_TEMPLATE ("src",
     GST_PAD_SRC,
@@ -199,17 +188,6 @@ gst_avt_decrypt_ts_stop (GstBaseTransform * trans)
 static void
 gst_plugin_template_init (GstPluginTemplate * filter)
 {
-  filter->sinkpad = gst_pad_new_from_static_template (&sink_factory, "sink");
-  gst_pad_set_event_function (filter->sinkpad,
-                              GST_DEBUG_FUNCPTR(gst_plugin_template_sink_event));
-  gst_pad_set_chain_function (filter->sinkpad,
-                              GST_DEBUG_FUNCPTR(gst_plugin_template_chain));
-  GST_PAD_SET_PROXY_CAPS (filter->sinkpad);
-  gst_element_add_pad (GST_ELEMENT (filter), filter->sinkpad);
-
-  filter->srcpad = gst_pad_new_from_static_template (&src_factory, "src");
-  GST_PAD_SET_PROXY_CAPS (filter->srcpad);
-  gst_element_add_pad (GST_ELEMENT (filter), filter->srcpad);
 
   filter->silent = FALSE;
 }
@@ -295,23 +273,6 @@ gst_plugin_template_sink_event (GstPad * pad, GstObject * parent, GstEvent * eve
       break;
   }
   return ret;
-}
-
-/* chain function
- * this function does the actual processing
- */
-static GstFlowReturn
-gst_plugin_template_chain (GstPad * pad, GstObject * parent, GstBuffer * buf)
-{
-  GstPluginTemplate *filter;
-
-  filter = GST_PLUGIN_TEMPLATE (parent);
-
-  if (filter->silent == FALSE)
-    g_print ("I'm plugged, therefore I'm in.\n");
-
-  /* just push out the incoming buffer without touching it */
-  return gst_pad_push (filter->srcpad, buf);
 }
 
 
