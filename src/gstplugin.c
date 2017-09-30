@@ -61,6 +61,7 @@
 #endif
 
 #include <gst/gst.h>
+#include <gst/base/base.h>
 
 #include "gstplugin.h"
 
@@ -106,6 +107,8 @@ static void gst_plugin_template_get_property (GObject * object, guint prop_id,
 
 static gboolean gst_plugin_template_sink_event (GstPad * pad, GstObject * parent, GstEvent * event);
 static GstFlowReturn gst_plugin_template_chain (GstPad * pad, GstObject * parent, GstBuffer * buf);
+static GstFlowReturn gst_plugin_template_transform_ip (GstBaseTransform * base,
+    GstBuffer * outbuf);
 
 /* GObject vmethod implementations */
 
@@ -125,6 +128,8 @@ gst_plugin_template_class_init (GstPluginTemplateClass * klass)
   g_object_class_install_property (gobject_class, PROP_SILENT,
       g_param_spec_boolean ("silent", "Silent", "Produce verbose output ?",
           FALSE, G_PARAM_READWRITE));
+  GST_BASE_TRANSFORM_CLASS (klass)->transform_ip =
+      GST_DEBUG_FUNCPTR (gst_plugin_template_transform_ip);
 
   gst_element_class_set_details_simple(gstelement_class,
     "Plugin",
@@ -191,6 +196,24 @@ gst_plugin_template_get_property (GObject * object, guint prop_id,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
   }
+}
+/* this function does the actual processing
+ */
+static GstFlowReturn
+gst_plugin_template_transform_ip (GstBaseTransform * base, GstBuffer * outbuf)
+{
+  GstPluginTemplate *filter = GST_PLUGIN_TEMPLATE (base);
+
+  if (GST_CLOCK_TIME_IS_VALID (GST_BUFFER_TIMESTAMP (outbuf)))
+    gst_object_sync_values (GST_OBJECT (filter), GST_BUFFER_TIMESTAMP (outbuf));
+
+  if (filter->silent == FALSE)
+    g_print ("I'm plugged, therefore I'm in.\n");
+  
+  /* FIXME: do something interesting here.  This simply copies the source
+   * to the destination. */
+
+  return GST_FLOW_OK;
 }
 
 /* GstElement vmethod implementations */
