@@ -16,7 +16,7 @@ plugin_LTLIBRARIES = libgstavtts.la
 ## Plugin 1
 
 # sources used to compile this plug-in
-libgstavtts_la_SOURCES = gstavtdecryptts.c  gstavtdecryptts.h  gstavtts.c
+libgstavtts_la_SOURCES = gstavtdecryptts.c  gstavtts.c gstavtdecryptts.h  
 
 # compiler and linker flags used to compile this plugin, set in configure.ac
 libgstavtts_la_CFLAGS = $(GST_CFLAGS)
