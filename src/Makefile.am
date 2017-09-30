@@ -16,13 +16,13 @@ plugin_LTLIBRARIES = libgstavtts.la
 ## Plugin 1
 
 # sources used to compile this plug-in
-libgstplugin_la_SOURCES = gstavtdecryptts.c  gstavtdecryptts.h  gstavtts.c
+libgstavtts_la_SOURCES = gstavtdecryptts.c  gstavtdecryptts.h  gstavtts.c
 
 # compiler and linker flags used to compile this plugin, set in configure.ac
-libgstplugin_la_CFLAGS = $(GST_CFLAGS)
-libgstplugin_la_LIBADD = $(GST_LIBS)
-libgstplugin_la_LDFLAGS = $(GST_PLUGIN_LDFLAGS)
-libgstplugin_la_LIBTOOLFLAGS = --tag=disable-static
+libgstavtts_la_CFLAGS = $(GST_CFLAGS)
+libgstavtts_la_LIBADD = $(GST_LIBS)
+libgstavtts_la_LDFLAGS = $(GST_PLUGIN_LDFLAGS)
+libgstavtts_la_LIBTOOLFLAGS = --tag=disable-static
 
 ## Plugin 2 (audio filter example)
 
